@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+}
+
+header {
+    padding: 80px 0;
+    background-color: #b9ddff;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+}
+
+nav {
+    text-align: center;
+    margin: 25px;
+}
+
+input#searchBox {
+    height: 39px;
+    width: 20%;
+    border: 2px solid #b9ddff;
+    border-radius: 20px;
+}
+
+div#content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+div.indvContent {
+    padding: 35px 0;
+    width: 200px;
+    text-align: center;
+    background-color: #b9ddff;
+    margin: 20px;
+}
