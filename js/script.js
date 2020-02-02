@@ -14,7 +14,7 @@
         */
 
 
-page.base('');
+
 
 
 var ids = [];
@@ -26,13 +26,6 @@ const weathUrl = 'http://airemad.com/api/v1/weather';
 var selectecId = "";
 
 pollData(pollUrl);
-
-
-// function placeId() {
-//     console.log("CONSEGUIDO");
-// }
-
-
 
 
 
@@ -88,6 +81,7 @@ function getHandler(i, pollInfo) {
  * Usada para sacar los datos principales y los datos de contaminación 
  * @param  {string} pollUrl "Url utilizada para sacar los datos de las direcciones y los datos de polución"
  */
+
 function pollData(pollUrl) {
 
     fetch(pollUrl)
@@ -101,17 +95,14 @@ function pollData(pollUrl) {
                 spaceContent.setAttribute('id', pollInfo[i].id);
 
                 var namePlace = document.createElement('a');
-                namePlace.setAttribute("href", "./estacion/" + pollInfo[i].id)
+
                 namePlace.innerText = pollInfo[i].name;
 
                 document.getElementById('content').appendChild(spaceContent);
 
                 spaceContent.appendChild(namePlace);
 
-                spaceContent.addEventListener("click", function () {
-                    page('/estacion/:placeId', getHandler(i, pollInfo))
-                }
-                );
+                spaceContent.addEventListener("click", getHandler(i, pollInfo));
 
             }
 
@@ -126,6 +117,8 @@ function pollData(pollUrl) {
  * Función utilizada para sacar los datos relacionados con el clima
  * @param  {string} weathUrl "Url utilizada para sacar la información del clima"
  */
+
+
 function weathData(weathUrl) {
 
     fetch(weathUrl)
@@ -143,7 +136,6 @@ function weathData(weathUrl) {
                     document.getElementById('mainContent').appendChild(weatherContent);
 
                     var dates = weathInfo[i].list[0].main;
-                    console.log(weathInfo);
 
                     var iconPrin = document.createElement("i");
                     iconPrin.className = "owf owf-"+weathInfo[i].list[0].weather[0].id +" owf-5x owf-pull-left owf-border";
@@ -156,17 +148,16 @@ function weathData(weathUrl) {
                                 var temp = document.createElement("p");
                                 temp.innerText = i + " " + dates[i] + "°C";
                                 weatherDescription.appendChild(temp);
-                                console.log(i, dates[i] + "°C");
+
                             } else if (i === "humidity") {
                                 var humidity = document.createElement("p");
                                 humidity.innerText = "Humedad:" + " " + dates[i] + "%";
                                 weatherDescription.appendChild(humidity);
-                                console.log(i, dates[i] + "%");
+
                             } else if (i === "pressure") {
                                 var pressure = document.createElement("p");
                                 pressure.innerText = "Presión:" + " " + dates[i] + "psi";
                                 weatherDescription.appendChild(pressure);
-                                console.log(i, dates[i] + "psi");
                             }
                         }
 
@@ -176,7 +167,6 @@ function weathData(weathUrl) {
                     var wind = document.createElement("p");
                     wind.innerText = "Viento " + weathInfo[i].list[0].wind.speed + "km/h " + weathInfo[i].list[0].wind.deg + "°";
                     weatherDescription.appendChild(wind);
-                    console.log("Viento " + weathInfo[i].list[0].wind.speed + "km/h " + weathInfo[i].list[0].wind.deg + "°")
 
 
                     var futureWeather = weathInfo[i].list;
@@ -198,7 +188,7 @@ function weathData(weathUrl) {
 
             var day = fecha.getUTCDay();
 
-            console.log(dias[day]);
+
 
             for (let i = 0; i < futureWeather.length; i++) {
                 var time = futureWeather[i].dt_txt.slice(11, 19);
@@ -219,7 +209,7 @@ function weathData(weathUrl) {
                     indTemp.innerText = futureWeather[i].main.temp + futureWeather[i].main.temp_max;
                     futureBox.appendChild(indTemp);
 
-                    console.log(futureWeather[i]);
+
 
                 }
             }
@@ -255,4 +245,3 @@ function buscador() {
 
 document.getElementById('searchBox').addEventListener('keyup', buscador);
 
-page();
