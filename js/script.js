@@ -25,6 +25,11 @@ const weathUrl = 'http://airemad.com/api/v1/weather';
 
 var selectecId = "";
 
+var principalBox = document.createElement('div');
+principalBox.setAttribute('id', 'firstBox');
+
+  var main = document.getElementById('mainContent');
+
 pollData(pollUrl);
 
 
@@ -37,13 +42,24 @@ pollData(pollUrl);
  */
 
 function getHandler(i, pollInfo) {
+
     return function handler() {
 
-        var pollutionInfo = document.createElement('div');
-        var name = document.createElement("h2");
-        name.innerText = pollInfo[i].name;
+        document.getElementById('menu').style.display = 'none';
+      
 
-        pollutionInfo.appendChild(name);
+        var pollutionInfo = document.createElement('div');
+        pollutionInfo.setAttribute("id", "pollutionBox")
+
+        var name = document.createElement("h2");
+        name.innerText = pollInfo[i].name ;
+
+        var line = document.createElement('hr');
+
+
+        main.appendChild(name);
+        main.appendChild(line);
+        main.appendChild(principalBox);
 
         var state = pollInfo[i];
         selectecId = pollInfo[i].id;
@@ -63,9 +79,10 @@ function getHandler(i, pollInfo) {
 
         }
 
-        var prueba = document.getElementById('mainContent');
-        prueba.removeChild(prueba.childNodes[1]);
-        document.getElementById('mainContent').appendChild(pollutionInfo);
+
+        main.removeChild(main.childNodes[1]);
+
+        principalBox.appendChild(pollutionInfo);
 
         weathData(weathUrl)
 
@@ -128,36 +145,37 @@ function weathData(weathUrl) {
             for (let i = 0; i < weathInfo.length; i++) {
                 if (selectecId === weathInfo[i].id) {
                     var weatherContent = document.createElement("div");
+                    weatherContent.setAttribute("id", "weatherBox");
                     var weatherDescription = document.createElement("h3");
 
                     weatherDescription.innerText = weathInfo[i].list[0].weather[0].description;
 
                     weatherContent.appendChild(weatherDescription);
-                    document.getElementById('mainContent').appendChild(weatherContent);
+                    principalBox.appendChild(weatherContent);
 
                     var dates = weathInfo[i].list[0].main;
 
                     var iconPrin = document.createElement("i");
-                    iconPrin.className = "owf owf-"+weathInfo[i].list[0].weather[0].id +" owf-5x owf-pull-left owf-border";
+                    iconPrin.className = "owf owf-" + weathInfo[i].list[0].weather[0].id + " owf-5x owf-pull-left owf-border";
 
-                    weatherDescription.appendChild(iconPrin);
+                    weatherContent.appendChild(iconPrin);
 
                     for (let i in dates) {
                         if (i !== "temp_kf" && i !== "sea_level" && i !== "grnd_level") {
                             if (i === "temp" || i === "feels_like" || i === "temp_min" || i === "temp_max") {
                                 var temp = document.createElement("p");
                                 temp.innerText = i + " " + dates[i] + "°C";
-                                weatherDescription.appendChild(temp);
+                                weatherContent.appendChild(temp);
 
                             } else if (i === "humidity") {
                                 var humidity = document.createElement("p");
                                 humidity.innerText = "Humedad:" + " " + dates[i] + "%";
-                                weatherDescription.appendChild(humidity);
+                                weatherContent.appendChild(humidity);
 
                             } else if (i === "pressure") {
                                 var pressure = document.createElement("p");
                                 pressure.innerText = "Presión:" + " " + dates[i] + "psi";
-                                weatherDescription.appendChild(pressure);
+                                weatherContent.appendChild(pressure);
                             }
                         }
 
@@ -166,7 +184,7 @@ function weathData(weathUrl) {
 
                     var wind = document.createElement("p");
                     wind.innerText = "Viento " + weathInfo[i].list[0].wind.speed + "km/h " + weathInfo[i].list[0].wind.deg + "°";
-                    weatherDescription.appendChild(wind);
+                    weatherContent.appendChild(wind);
 
 
                     var futureWeather = weathInfo[i].list;
@@ -181,6 +199,7 @@ function weathData(weathUrl) {
 
 
             var futureBox = document.createElement("div");
+            futureBox.setAttribute("id", "futureWeatherBox");
 
             document.getElementById('mainContent').appendChild(futureBox);
             var dias = ["dom", "lun", "mar", "mie", "jue", "vie", "sab"];
@@ -194,6 +213,10 @@ function weathData(weathUrl) {
                 var time = futureWeather[i].dt_txt.slice(11, 19);
 
                 if (time === "00:00:00") {
+                    var indvFutureWeather = document.createElement('div');
+                    indvFutureWeather.setAttribute("class", 'indvFutWeather');
+
+
                     var indvDate = futureWeather[i].dt_txt.slice(0, 10);
                     var indvDateBox = document.createElement("h4");
                     day++
@@ -201,16 +224,16 @@ function weathData(weathUrl) {
                     indvDateBox.innerText = dias[day] + " " + indvDate;
 
                     var icon = document.createElement("i");
-                    icon.className = "owf owf-"+futureWeather[i].weather[0].id +" owf-5x owf-pull-left owf-border";
-                    futureBox.appendChild(icon);
-                    futureBox.appendChild(indvDateBox);
+                    icon.className = "owf owf-" + futureWeather[i].weather[0].id + " owf-5x owf-pull-left owf-border";
+                 
 
                     var indTemp = document.createElement("h5");
-                    indTemp.innerText = futureWeather[i].main.temp + futureWeather[i].main.temp_max;
-                    futureBox.appendChild(indTemp);
-
-
-
+                    indTemp.innerText = "Temperatura:" + futureWeather[i].main.temp+'° '+ "Temperatura máxima:" + futureWeather[i].main.temp_max +'°';
+                    
+                    futureBox.appendChild(indvFutureWeather);
+                    indvFutureWeather.appendChild(icon);
+                    indvFutureWeather.appendChild(indvDateBox);
+                    indvFutureWeather.appendChild(indTemp);
                 }
             }
         })
